@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme -->
-    <style name="Theme.CardNest" parent="Theme.Material3.Light">
+    <style name="Theme.CardNest" parent="android:Theme.Material.Light">
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:enforceStatusBarContrast">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
