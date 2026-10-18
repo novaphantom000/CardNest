@@ -31,8 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
-import app.cardnest.vault.data.repository.AuthRepository
-import javax.inject.Inject
 
 @Composable
 fun AuthScreen(
@@ -46,19 +44,10 @@ fun AuthScreen(
 
     LaunchedEffect(Unit) {
         if (activity != null) {
-            // Automatically trigger biometric prompt
-            val authRepository = (activity.application as app.cardnest.vault.CardNestApplication)
-                .let { hilt.EntryPoints.get(it, AuthEntryPoint::class.java).authRepository() }
-
-            authRepository.showBiometricPrompt(
+            viewModel.authenticate(
                 activity = activity,
-                onSuccess = {
-                    viewModel.unlock()
-                    onUnlocked()
-                },
-                onError = { error ->
-                    errorMessage = error
-                }
+                onSuccess = onUnlocked,
+                onError = { error -> errorMessage = error }
             )
         }
     }
@@ -120,18 +109,10 @@ fun AuthScreen(
                             onClick = {
                                 errorMessage = null
                                 if (activity != null) {
-                                    val authRepository = (activity.application as app.cardnest.vault.CardNestApplication)
-                                        .let { hilt.EntryPoints.get(it, AuthEntryPoint::class.java).authRepository() }
-
-                                    authRepository.showBiometricPrompt(
+                                    viewModel.authenticate(
                                         activity = activity,
-                                        onSuccess = {
-                                            viewModel.unlock()
-                                            onUnlocked()
-                                        },
-                                        onError = { error ->
-                                            errorMessage = error
-                                        }
+                                        onSuccess = onUnlocked,
+                                        onError = { error -> errorMessage = error }
                                     )
                                 }
                             }
@@ -143,10 +124,4 @@ fun AuthScreen(
             }
         }
     }
-}
-
-@dagger.hilt.EntryPoint
-@dagger.hilt.InstallIn(dagger.hilt.components.SingletonComponent::class)
-interface AuthEntryPoint {
-    fun authRepository(): AuthRepository
 }

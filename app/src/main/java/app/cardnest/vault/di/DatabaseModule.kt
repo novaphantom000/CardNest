@@ -9,7 +9,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import net.sqlcipher.database.SupportFactory
 import javax.inject.Singleton
 
 @Module
@@ -21,9 +20,7 @@ object DatabaseModule {
     fun provideDatabase(
         @ApplicationContext context: Context
     ): CardNestDatabase {
-        // Database encryption using SQLCipher is optional
-        // For now, using standard Room database
-        // Card numbers are already encrypted at application level
+        // Card numbers are encrypted at application level using Android Keystore
         return Room.databaseBuilder(
             context,
             CardNestDatabase::class.java,
